@@ -1,0 +1,863 @@
+{
+  "name": "Cartoon API → YouTube (Drive)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 4
+            }
+          ]
+        }
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000001",
+      "name": "A cada 4 horas",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000002",
+              "name": "apiBaseUrl",
+              "value": "https://SEU_DOMINIO_DA_API",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000003",
+              "name": "pastaPendentes",
+              "value": "ID_PASTA_PENDENTES",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000004",
+              "name": "pastaProcessando",
+              "value": "ID_PASTA_PROCESSANDO",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000005",
+              "name": "pastaPostado",
+              "value": "ID_PASTA_POSTADO",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000006",
+              "name": "pastaErro",
+              "value": "ID_PASTA_ERRO",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000007",
+              "name": "esperaSegundos",
+              "value": 30,
+              "type": "number"
+            },
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000008",
+              "name": "maxTentativas",
+              "value": 120,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000009",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "='{{ $('Config').first().json.pastaPendentes }}' in parents and name contains '.json' and trashed = false",
+        "returnAll": false,
+        "limit": 1,
+        "filter": {},
+        "options": {
+          "fields": [
+            "id",
+            "name"
+          ]
+        }
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000010",
+      "name": "Buscar JSON pendente",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        440,
+        300
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Buscar JSON pendente').first().json.id }}",
+          "mode": "id"
+        },
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Config').first().json.pastaProcessando }}",
+          "mode": "id"
+        }
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000011",
+      "name": "Mover p/ processando",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        660,
+        300
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Buscar JSON pendente').first().json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000012",
+      "name": "Baixar JSON",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        880,
+        300
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lê o JSON baixado do Drive, valida e separa: pedido para a API + dados do YouTube.\nconst arquivo = $('Buscar JSON pendente').first().json;\nconst buffer = await this.helpers.getBinaryDataBuffer(0, 'data');\nconst texto = buffer.toString('utf8').replace(/^\\uFEFF/, ''); // remove BOM (arquivos salvos no Windows)\n\nlet dados;\ntry { dados = JSON.parse(texto); }\ncatch (e) { throw new Error('\"' + arquivo.name + '\" não é um JSON válido: ' + e.message); }\n\nconst erros = [];\nif (!dados.roteiro || typeof dados.roteiro !== 'object') erros.push('campo \"roteiro\" ausente');\n\nconst yt = dados.youtube || {};\nconst titulo = String(yt.titulo || '').trim();\nif (!titulo) erros.push('youtube.titulo ausente');\nif (titulo.length > 100) erros.push('youtube.titulo tem ' + titulo.length + ' caracteres (máx. 100)');\nif (/[<>]/.test(titulo)) erros.push('youtube.titulo não pode conter < ou >');\n\nconst hashtags = (Array.isArray(yt.hashtags) ? yt.hashtags : [])\n  .map(h => '#' + String(h).replace(/^#+/, '').replace(/\\s+/g, ''))\n  .filter(h => h.length > 1);\n\nlet descricao = String(yt.descricao || '').trim();\nif (hashtags.length) descricao += (descricao ? '\\n\\n' : '') + hashtags.join(' ');\nif (/[<>]/.test(descricao)) erros.push('youtube.descricao não pode conter < ou >');\nif (Buffer.byteLength(descricao, 'utf8') > 5000) erros.push('youtube.descricao passa de 5000 bytes');\n\nconst tagsBrutas = Array.isArray(yt.tags) ? yt.tags : String(yt.tags || '').split(',');\nconst tags = [...new Set([...tagsBrutas, ...hashtags.map(h => h.slice(1))]\n  .map(t => String(t).replace(/[<>,#]/g, '').trim()).filter(Boolean))];\nif (tags.join(',').length > 500) erros.push('tags somam mais de 500 caracteres');\n\nconst privacidade = yt.privacidade || 'private';\nif (!['private', 'unlisted', 'public'].includes(privacidade)) erros.push('youtube.privacidade deve ser private, unlisted ou public');\nif (typeof yt.paraCriancas !== 'boolean') erros.push('youtube.paraCriancas deve ser true ou false (declaração obrigatória do YouTube)');\n\nif (erros.length) throw new Error('\"' + arquivo.name + '\": ' + erros.join('; '));\n\nconst pedido = {\n  pasta: dados.pasta || arquivo.name.replace(/\\.json$/i, ''),\n  vozes: dados.vozes !== false,\n  versaoSemFalas: !!dados.versaoSemFalas,\n  post: { titulo, descricao, hashtags },   // a API só guarda e devolve isso\n  roteiro: dados.roteiro\n};\n\nreturn [{ json: {\n  arquivoId: arquivo.id,\n  arquivoNome: arquivo.name,\n  pedido,\n  youtube: {\n    titulo, descricao,\n    tags: tags.join(','),\n    categoria: String(yt.categoria || '1'),     // 1 = Filmes e animação, 24 = Entretenimento\n    privacidade,\n    paraCriancas: yt.paraCriancas,\n    notificarInscritos: yt.notificarInscritos !== false\n  }\n} }];"
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000013",
+      "name": "Preparar dados",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        300
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.apiBaseUrl }}/api/v1/historias",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.pedido) }}",
+        "options": {
+          "timeout": 60000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000014",
+      "name": "Enviar para API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        280
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "Cartoon API (Bearer)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000015",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 202,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000016",
+      "name": "Aceito (202)?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1540,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "amount": "={{ $('Config').first().json.esperaSegundos }}",
+        "unit": "seconds"
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000017",
+      "name": "Aguardar",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1760,
+        260
+      ],
+      "webhookId": "a1b2c3d4-0000-4000-8000-000000000018"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Config').first().json.apiBaseUrl }}/api/v1/historias/{{ $('Enviar para API').first().json.body.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000019",
+      "name": "Consultar status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1980,
+        260
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "Cartoon API (Bearer)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a1b2c3d4-0000-4000-8000-000000000020",
+                    "leftValue": "={{ $json.statusCode }}",
+                    "rightValue": 200,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pronto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a1b2c3d4-0000-4000-8000-000000000021",
+                    "leftValue": "={{ $json.statusCode }}",
+                    "rightValue": 202,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Processando"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Erro"
+        }
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000022",
+      "name": "Situação",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2200,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000023",
+              "leftValue": "={{ $runIndex + 1 }}",
+              "rightValue": "={{ $('Config').first().json.maxTentativas }}",
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000024",
+      "name": "Ainda pode tentar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2420,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Config').first().json.apiBaseUrl }}/api/v1/historias/{{ $('Enviar para API').first().json.body.id }}/download",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 600000,
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000025",
+      "name": "Baixar vídeo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2420,
+        100
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "Cartoon API (Bearer)"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "upload",
+        "title": "={{ $('Preparar dados').first().json.youtube.titulo }}",
+        "regionCode": "BR",
+        "categoryId": "={{ $('Preparar dados').first().json.youtube.categoria }}",
+        "binaryProperty": "data",
+        "options": {
+          "description": "={{ $('Preparar dados').first().json.youtube.descricao }}",
+          "tags": "={{ $('Preparar dados').first().json.youtube.tags }}",
+          "privacyStatus": "={{ $('Preparar dados').first().json.youtube.privacidade }}",
+          "selfDeclaredMadeForKids": "={{ $('Preparar dados').first().json.youtube.paraCriancas }}",
+          "notifySubscribers": "={{ $('Preparar dados').first().json.youtube.notificarInscritos }}"
+        }
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000026",
+      "name": "Publicar no YouTube",
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        2640,
+        80
+      ],
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "",
+          "name": "YouTube account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Buscar JSON pendente').first().json.id }}",
+          "mode": "id"
+        },
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Config').first().json.pastaPostado }}",
+          "mode": "id"
+        }
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000027",
+      "name": "Mover p/ postado",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2860,
+        60
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000028",
+              "name": "arquivo",
+              "value": "={{ $('Buscar JSON pendente').first().json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000029",
+              "name": "jobId",
+              "value": "={{ $('Enviar para API').first().json.body.id }}",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000030",
+              "name": "youtubeId",
+              "value": "={{ $('Publicar no YouTube').first().json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000031",
+              "name": "youtubeUrl",
+              "value": "=https://youtu.be/{{ $('Publicar no YouTube').first().json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000032",
+      "name": "Resumo",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3080,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1b2c3d4-0000-4000-8000-000000000033",
+              "name": "motivo",
+              "value": "={{ $json.error\n  ? 'Falha: ' + (typeof $json.error === 'string' ? $json.error : ($json.error.message || JSON.stringify($json.error)))\n  : ($json.statusCode == 202\n      ? 'Tempo esgotado: o vídeo não ficou pronto após ' + $('Config').first().json.maxTentativas + ' tentativas (job ' + $('Enviar para API').first().json.body.id + ')'\n      : 'API respondeu HTTP ' + $json.statusCode + ': ' + JSON.stringify($json.body).slice(0, 1500)) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000034",
+      "name": "Montar erro",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2640,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Buscar JSON pendente').first().json.id }}",
+          "mode": "id"
+        },
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Config').first().json.pastaErro }}",
+          "mode": "id"
+        }
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000035",
+      "name": "Mover p/ erro",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2860,
+        620
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "errorMessage": "={{ $('Montar erro').first().json.motivo }}"
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000036",
+      "name": "Parar com erro",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        3080,
+        620
+      ]
+    }
+  ],
+  "connections": {
+    "A cada 4 horas": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Buscar JSON pendente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar JSON pendente": {
+      "main": [
+        [
+          {
+            "node": "Mover p/ processando",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mover p/ processando": {
+      "main": [
+        [
+          {
+            "node": "Baixar JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar JSON": {
+      "main": [
+        [
+          {
+            "node": "Preparar dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar dados": {
+      "main": [
+        [
+          {
+            "node": "Enviar para API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Montar erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar para API": {
+      "main": [
+        [
+          {
+            "node": "Aceito (202)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aceito (202)?": {
+      "main": [
+        [
+          {
+            "node": "Aguardar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Montar erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguardar": {
+      "main": [
+        [
+          {
+            "node": "Consultar status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar status": {
+      "main": [
+        [
+          {
+            "node": "Situação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Situação": {
+      "main": [
+        [
+          {
+            "node": "Baixar vídeo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ainda pode tentar?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Montar erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ainda pode tentar?": {
+      "main": [
+        [
+          {
+            "node": "Aguardar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Montar erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar vídeo": {
+      "main": [
+        [
+          {
+            "node": "Publicar no YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Montar erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publicar no YouTube": {
+      "main": [
+        [
+          {
+            "node": "Mover p/ postado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Montar erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mover p/ postado": {
+      "main": [
+        [
+          {
+            "node": "Resumo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar erro": {
+      "main": [
+        [
+          {
+            "node": "Mover p/ erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mover p/ erro": {
+      "main": [
+        [
+          {
+            "node": "Parar com erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all"
+  },
+  "tags": []
+}

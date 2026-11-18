@@ -1,0 +1,302 @@
+{
+  "name": "Quarto",
+  "floor": {
+    "size": [
+      14,
+      16
+    ],
+    "center": [
+      0,
+      3
+    ],
+    "color": "#B98B63"
+  },
+  "boxes": [
+    {
+      "name": "WallBack",
+      "pos": [
+        0,
+        1.6,
+        -3.1
+      ],
+      "size": [
+        11,
+        3.2,
+        0.2
+      ],
+      "color": "#8DB6DE"
+    },
+    {
+      "name": "WallLeft",
+      "pos": [
+        -5.5,
+        1.6,
+        -0.5
+      ],
+      "size": [
+        0.2,
+        3.2,
+        5.4
+      ],
+      "color": "#7FA9D3"
+    },
+    {
+      "name": "Baseboard",
+      "pos": [
+        0,
+        0.08,
+        -2.98
+      ],
+      "size": [
+        11,
+        0.16,
+        0.06
+      ],
+      "color": "#FFFFFF"
+    },
+    {
+      "name": "Stripe",
+      "pos": [
+        0,
+        1.1,
+        -2.99
+      ],
+      "size": [
+        11,
+        0.12,
+        0.03
+      ],
+      "color": "#F7B267"
+    },
+    {
+      "name": "WindowFrame",
+      "pos": [
+        0,
+        1.85,
+        -2.99
+      ],
+      "size": [
+        1.3,
+        1.1,
+        0.05
+      ],
+      "color": "#FFFFFF"
+    },
+    {
+      "name": "WindowGlass",
+      "pos": [
+        0,
+        1.85,
+        -2.96
+      ],
+      "size": [
+        1.1,
+        0.9,
+        0.03
+      ],
+      "color": "#FFE3A3"
+    },
+    {
+      "name": "WindowCross",
+      "pos": [
+        0,
+        1.85,
+        -2.94
+      ],
+      "size": [
+        0.06,
+        0.9,
+        0.02
+      ],
+      "color": "#FFFFFF"
+    },
+    {
+      "name": "Star1",
+      "pos": [
+        -2.6,
+        2.4,
+        -2.98
+      ],
+      "size": [
+        0.12,
+        0.12,
+        0.02
+      ],
+      "color": "#FFD166"
+    },
+    {
+      "name": "Star2",
+      "pos": [
+        2.9,
+        2.2,
+        -2.98
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.02
+      ],
+      "color": "#FFD166"
+    },
+    {
+      "name": "Star3",
+      "pos": [
+        -1.2,
+        2.7,
+        -2.98
+      ],
+      "size": [
+        0.08,
+        0.08,
+        0.02
+      ],
+      "color": "#FFD166"
+    }
+  ],
+  "items": [
+    {
+      "model": "furniture/rug_rectangle_stripes_A.gltf",
+      "pos": [
+        0,
+        0,
+        -0.5
+      ],
+      "scale": 0.65
+    },
+    {
+      "model": "furniture/bed_single_A.gltf",
+      "pos": [
+        -1.8,
+        0,
+        -2.05
+      ],
+      "scale": 0.6
+    },
+    {
+      "model": "furniture/bed_single_B.gltf",
+      "pos": [
+        1.8,
+        0,
+        -2.05
+      ],
+      "scale": 0.6
+    },
+    {
+      "model": "furniture/table_small.gltf",
+      "pos": [
+        0,
+        0,
+        -2.7
+      ],
+      "scale": 0.5
+    },
+    {
+      "model": "furniture/lamp_table.gltf",
+      "pos": [
+        0,
+        0.5,
+        -2.7
+      ],
+      "scale": 0.45
+    },
+    {
+      "model": "furniture/shelf_B_large_decorated.gltf",
+      "pos": [
+        -1.8,
+        1.75,
+        -2.93
+      ],
+      "scale": 0.6
+    },
+    {
+      "model": "furniture/pictureframe_small_A.gltf",
+      "pos": [
+        1.8,
+        1.7,
+        -2.97
+      ],
+      "scale": 0.7
+    },
+    {
+      "model": "furniture/cabinet_small_decorated.gltf",
+      "pos": [
+        3.3,
+        0,
+        -2.65
+      ],
+      "scale": 0.6
+    },
+    {
+      "model": "props:pipa",
+      "pos": [
+        3.3,
+        1.75,
+        -2.85
+      ],
+      "rotY": 0
+    }
+  ],
+  "anchors": {
+    "bed": {
+      "pos": [
+        -1.8,
+        0,
+        -0.75
+      ],
+      "seat": [
+        -1.8,
+        0.32,
+        -1.35
+      ],
+      "seatYaw": 0
+    },
+    "bed_2": {
+      "pos": [
+        1.8,
+        0,
+        -0.75
+      ],
+      "seat": [
+        1.8,
+        0.32,
+        -1.35
+      ],
+      "seatYaw": 0
+    },
+    "window": {
+      "pos": [
+        0,
+        0,
+        -2.1
+      ]
+    },
+    "shelf": {
+      "pos": [
+        3.3,
+        0,
+        -1.9
+      ]
+    },
+    "center": {
+      "pos": [
+        0,
+        0,
+        0.5
+      ]
+    },
+    "path_start": {
+      "pos": [
+        -2.2,
+        0,
+        0.8
+      ]
+    },
+    "path_end": {
+      "pos": [
+        2.2,
+        0,
+        0.8
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "Gobkit free packs (https://gobkit.com/api/free), licença CC0 1.0, sem atribuição obrigatória",
+  "characters": [
+    {
+      "id": "davi",
+      "name": "Davi",
+      "ageYears": 9,
+      "gender": "male",
+      "height": 1.33,
+      "source": "https://gobkit.com/freebies/human019/Schoolboy.glb"
+    },
+    {
+      "id": "noah",
+      "name": "Noah",
+      "ageYears": 8,
+      "gender": "male",
+      "height": 1.27,
+      "source": "https://gobkit.com/freebies/human001/Schoolkid.glb"
+    },
+    {
+      "id": "caio",
+      "name": "Caio",
+      "ageYears": 7,
+      "gender": "male",
+      "height": 1.22,
+      "source": "https://gobkit.com/freebies/human015/Student.glb"
+    },
+    {
+      "id": "tony",
+      "name": "Tony",
+      "ageYears": 10,
+      "gender": "male",
+      "height": 1.38,
+      "source": "https://gobkit.com/freebies/human019/Schoolgirl.glb"
+    }
+  ]
+}

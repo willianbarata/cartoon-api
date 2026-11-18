@@ -1,0 +1,66 @@
+{
+  "note": "engine edge = Edge TTS online (Microsoft). edgePitch/edgeRate são aplicados pelo serviço; pitch (multiplicador) e formant via rubberband depois. formant=shifted deixa o timbre mais jovem.",
+  "noah": {
+    "engine": "edge",
+    "voice": "pt-BR-FranciscaNeural",
+    "edgePitch": "+2Hz",
+    "edgeRate": "+12%",
+    "pitch": 1.1,
+    "formant": "shifted",
+    "tempo": 1.0
+  },
+  "tony": {
+    "engine": "edge",
+    "voice": "pt-BR-ThalitaMultilingualNeural",
+    "edgePitch": "+12Hz",
+    "edgeRate": "+6%",
+    "pitch": 1.16,
+    "formant": "shifted",
+    "tempo": 1.0
+  },
+  "davi": {
+    "engine": "edge",
+    "voice": "pt-BR-ThalitaMultilingualNeural",
+    "edgePitch": "+5Hz",
+    "edgeRate": "+10%",
+    "pitch": 1.12,
+    "formant": "shifted",
+    "tempo": 1.0
+  },
+  "caio": {
+    "engine": "edge",
+    "voice": "pt-BR-FranciscaNeural",
+    "edgePitch": "+10Hz",
+    "edgeRate": "+10%",
+    "pitch": 1.15,
+    "formant": "shifted",
+    "tempo": 1.0
+  },
+  "kokoroBackup": {
+    "note": "perfis offline anteriores",
+    "davi": {
+      "voice": "pm_alex",
+      "pitch": 1.19,
+      "speed": 1.12,
+      "formant": "preserved"
+    },
+    "caio": {
+      "voice": "pm_alex",
+      "pitch": 1.26,
+      "speed": 1.08,
+      "formant": "preserved"
+    },
+    "noah": {
+      "voice": "pf_dora",
+      "pitch": 1.19,
+      "speed": 1.12,
+      "formant": "preserved"
+    },
+    "tony": {
+      "voice": "pf_dora",
+      "pitch": 1.12,
+      "speed": 1.06,
+      "formant": "preserved"
+    }
+  }
+}

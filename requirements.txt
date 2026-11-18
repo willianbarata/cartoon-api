@@ -1,0 +1,4 @@
+# Vozes (Edge TTS, online e gratuito) e manipulação de áudio
+edge-tts==7.3.1
+numpy==2.5.5
+soundfile==0.14.0

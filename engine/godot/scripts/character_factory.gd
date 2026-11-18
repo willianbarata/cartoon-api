@@ -1,0 +1,58 @@
+extends RefCounted
+const G = preload("res://scripts/geometry.gd")
+const Animator = preload("res://scripts/animation_controller.gd")
+const Face = preload("res://scripts/emotion_controller.gd")
+const Kids = preload("res://scripts/kid_factory.gd")
+
+static func create(config: Dictionary) -> Node3D:
+	if config.get("type", "robot") == "kid":
+		return Kids.create(config)
+	var root := Node3D.new()
+	root.name = config.id
+	root.set_meta("character", config)
+	var blue = G.material(config.get("bodyColor", "#3B82F6"), 0.15)
+	var navy = G.material("#133455")
+	var joint = G.material("#78BDDF", 0.3)
+	var white = G.material(config.get("eyeColor", "#FFFFFF"))
+	var gold = G.material("#FFCA67")
+	var body = G.pivot(root, "Body", Vector3(0, 0.84, 0))
+	G.sphere(body, "Torso", Vector3(0, 0.05, 0), Vector3(0.73, 0.73, 0.48), blue)
+	G.sphere(body, "ChestPlate", Vector3(0, 0.1, 0.22), Vector3(0.43, 0.43, 0.09), joint)
+	G.sphere(body, "Heart", Vector3(0, 0.12, 0.275), Vector3(0.12, 0.12, 0.04), gold)
+	var head = G.pivot(body, "Head", Vector3(0, 0.64, 0))
+	head.scale = Vector3.ONE * float(config.get("headScale", 1.0))
+	G.sphere(head, "Shell", Vector3.ZERO, Vector3(1.03, 0.76, 0.69), blue)
+	G.sphere(head, "Faceplate", Vector3(0, 0, 0.285), Vector3(0.86, 0.53, 0.18), navy)
+	for side in [-1, 1]:
+		var suffix = "L" if side < 0 else "R"
+		var eye = G.pivot(head, "Eye" + suffix, Vector3(side * 0.205, 0.055, 0.37))
+		var eye_size = float(config.get("eyeSize", 0.15))
+		G.sphere(eye, "White", Vector3.ZERO, Vector3(eye_size * 1.35, eye_size * 1.7, 0.055), white)
+		G.sphere(eye, "Pupil", Vector3(0.015, -0.006, 0.034), Vector3(0.075, 0.13, 0.027), navy)
+		G.sphere(eye, "Glint", Vector3(0.002, 0.033, 0.051), Vector3(0.025, 0.036, 0.012), white, 12)
+		G.box(head, "Brow" + suffix, Vector3(side * 0.205, 0.225, 0.365), Vector3(0.19, 0.033, 0.04), joint)
+		G.sphere(head, "Ear" + suffix, Vector3(side * 0.51, 0, 0), Vector3(0.16, 0.26, 0.26), joint)
+		var arm = G.pivot(body, "Arm" + suffix, Vector3(side * 0.42, 0.27, 0))
+		G.sphere(arm, "Shoulder", Vector3.ZERO, Vector3.ONE * 0.21, joint)
+		var arm_length = float(config.get("armLength", 0.5))
+		G.sphere(arm, "UpperArm", Vector3(0, -arm_length * 0.28, 0), Vector3(0.15, arm_length * 0.65, 0.17), blue)
+		var elbow = G.pivot(arm, "Elbow", Vector3(0, -arm_length * 0.55, 0))
+		G.sphere(elbow, "Joint", Vector3.ZERO, Vector3.ONE * 0.15, joint)
+		G.sphere(elbow, "Forearm", Vector3(0, -arm_length * 0.18, 0), Vector3(0.18, arm_length * 0.48, 0.2), blue)
+		G.sphere(elbow, "Hand", Vector3(0, -arm_length * 0.43, 0), Vector3(0.22, 0.2, 0.22), gold)
+		G.pivot(elbow, "Grip", Vector3(0, -arm_length * 0.48, 0.08))
+		var leg = G.pivot(root, "Leg" + suffix, Vector3(side * 0.21, 0.5, 0))
+		var leg_length = float(config.get("legLength", 0.45))
+		G.sphere(leg, "Limb", Vector3(0, -leg_length * 0.35, 0), Vector3(0.21, leg_length * 0.8, 0.22), joint)
+		G.sphere(leg, "Boot", Vector3(0, -leg_length * 0.82, 0.085), Vector3(0.31, 0.22, 0.43), navy)
+	G.sphere(head, "Mouth", Vector3(0, -0.145, 0.38), Vector3(0.16, 0.035, 0.03), gold)
+	G.cylinder(head, "Antenna", Vector3(0, 0.44, 0), 0.025, 0.18, joint)
+	G.sphere(head, "AntennaTip", Vector3(0, 0.55, 0), Vector3.ONE * 0.12, gold)
+	root.scale = Vector3.ONE * (float(config.get("height", 1.8)) / 2.03)
+	var animator = Animator.new()
+	animator.name = "AnimationController"
+	root.add_child(animator)
+	var face = Face.new()
+	face.name = "EmotionController"
+	root.add_child(face)
+	return root

@@ -1,0 +1,1049 @@
+{
+  "version": 1,
+  "title": "Ninguém Lembrou",
+  "audioSlug": "ninguem-lembrou",
+  "duration": 30,
+  "video": {
+    "width": 720,
+    "height": 1280,
+    "fps": 24
+  },
+  "characters": [
+    {
+      "id": "davi",
+      "name": "Davi",
+      "type": "kid",
+      "model": "davi",
+      "personality": "líder brincalhão"
+    },
+    {
+      "id": "noah",
+      "name": "Noah",
+      "type": "kid",
+      "model": "noah",
+      "personality": "curiosa"
+    },
+    {
+      "id": "caio",
+      "name": "Caio",
+      "type": "kid",
+      "model": "caio",
+      "personality": "tímido e sensível"
+    },
+    {
+      "id": "tony",
+      "name": "Tony",
+      "type": "kid",
+      "model": "tony",
+      "personality": "protetora"
+    }
+  ],
+  "scenes": [
+    {
+      "sceneId": "abertura",
+      "duration": 3,
+      "environment": {
+        "type": "street"
+      },
+      "characters": [
+        "caio"
+      ],
+      "placements": {
+        "caio": [
+          -0.5,
+          0.32,
+          -1.3
+        ]
+      },
+      "props": [
+        {
+          "id": "pombo",
+          "model": "pombo",
+          "position": [
+            0.35,
+            0.08,
+            -0.6
+          ],
+          "moves": [
+            {
+              "time": 0.4,
+              "duration": 0.7,
+              "to": [
+                0.05,
+                0.08,
+                -0.85
+              ]
+            },
+            {
+              "time": 1.6,
+              "duration": 0.7,
+              "to": [
+                0.45,
+                0.08,
+                -0.75
+              ]
+            }
+          ]
+        }
+      ],
+      "camera": {
+        "preset": "close_up",
+        "target": "caio",
+        "distance": 3,
+        "height": 1.5,
+        "fov": 40,
+        "push": 0.5,
+        "handheld": 0.6
+      },
+      "events": [
+        {
+          "time": 0,
+          "actor": "caio",
+          "action": "cry",
+          "duration": 3,
+          "emotion": "sad"
+        }
+      ],
+      "dialogues": [
+        {
+          "time": 0.1,
+          "duration": 2.9,
+          "text": "Hoje é aniversário do Caio..."
+        }
+      ],
+      "sounds": [
+        {
+          "time": 0,
+          "path": "music/piano_triste.wav",
+          "volume": 0.55
+        }
+      ]
+    },
+    {
+      "sceneId": "corrida",
+      "duration": 4,
+      "environment": {
+        "type": "street"
+      },
+      "characters": [
+        "caio",
+        "davi",
+        "noah",
+        "tony"
+      ],
+      "placements": {
+        "caio": [
+          -0.5,
+          0.32,
+          -1.3
+        ],
+        "davi": [
+          -3.4,
+          0,
+          1.0
+        ],
+        "noah": [
+          -4.0,
+          0,
+          1.4
+        ],
+        "tony": [
+          -3.0,
+          0,
+          0.5
+        ]
+      },
+      "props": [
+        {
+          "id": "onibus",
+          "model": "onibus_escolar",
+          "position": [
+            -16,
+            0,
+            -5.3
+          ],
+          "faceMove": false,
+          "moves": [
+            {
+              "time": 0,
+              "duration": 4,
+              "to": [
+                16,
+                0,
+                -5.3
+              ]
+            }
+          ]
+        }
+      ],
+      "camera": {
+        "preset": "group",
+        "target": "caio",
+        "distance": 6.5,
+        "height": 2.3,
+        "fov": 40,
+        "handheld": 1.0
+      },
+      "events": [
+        {
+          "time": 0,
+          "actor": "caio",
+          "action": "sad",
+          "duration": 4,
+          "emotion": "sad"
+        },
+        {
+          "time": 0,
+          "actor": "davi",
+          "action": "run",
+          "target": "path_end",
+          "duration": 2.2,
+          "emotion": "happy"
+        },
+        {
+          "time": 0.2,
+          "actor": "tony",
+          "action": "run",
+          "target": "bench",
+          "duration": 1.6,
+          "emotion": "curious"
+        },
+        {
+          "time": 0.3,
+          "actor": "noah",
+          "action": "run",
+          "target": "path_end",
+          "duration": 2.4,
+          "emotion": "happy"
+        },
+        {
+          "time": 1.8,
+          "actor": "tony",
+          "action": "look_at",
+          "target": "caio",
+          "duration": 2.2,
+          "emotion": "curious"
+        },
+        {
+          "time": 2.2,
+          "actor": "davi",
+          "action": "wave",
+          "duration": 1.8
+        },
+        {
+          "time": 2.7,
+          "actor": "noah",
+          "action": "jump",
+          "duration": 0.8
+        }
+      ],
+      "lines": [
+        {
+          "time": 0.3,
+          "speaker": "davi",
+          "text": "Bora, a gente vai se atrasar!"
+        },
+        {
+          "time": 2.2,
+          "speaker": "noah",
+          "text": "Corre, corre!"
+        }
+      ],
+      "dialogues": [
+        {
+          "time": 1.9,
+          "duration": 2.1,
+          "text": "...e ninguém lembrou."
+        }
+      ],
+      "sounds": [
+        {
+          "time": 0,
+          "path": "sfx/swish_1.wav",
+          "volume": 0.5
+        },
+        {
+          "time": 1.1,
+          "path": "sfx/swish_3.wav",
+          "volume": 0.35
+        },
+        {
+          "time": 2.75,
+          "path": "sfx/boing.wav",
+          "volume": 0.45
+        }
+      ]
+    },
+    {
+      "sceneId": "segredo",
+      "duration": 2,
+      "environment": {
+        "type": "street"
+      },
+      "characters": [
+        "tony",
+        "caio"
+      ],
+      "placements": {
+        "tony": [
+          0.4,
+          0,
+          -0.2
+        ],
+        "caio": [
+          -0.5,
+          0.32,
+          -1.3
+        ]
+      },
+      "camera": {
+        "preset": "close_up",
+        "target": "tony",
+        "distance": 3,
+        "height": 1.5,
+        "fov": 40,
+        "push": 0.6,
+        "handheld": 0.8
+      },
+      "events": [
+        {
+          "time": 0,
+          "actor": "tony",
+          "action": "nod",
+          "duration": 1.0,
+          "emotion": "happy"
+        },
+        {
+          "time": 0,
+          "actor": "caio",
+          "action": "sad",
+          "duration": 2,
+          "emotion": "sad"
+        },
+        {
+          "time": 1.0,
+          "actor": "tony",
+          "action": "laugh",
+          "duration": 1.0,
+          "emotion": "happy"
+        }
+      ],
+      "dialogues": [
+        {
+          "time": 0.1,
+          "duration": 1.9,
+          "text": "Será mesmo?"
+        }
+      ],
+      "sounds": [
+        {
+          "time": 0,
+          "path": "sfx/swish_2.wav",
+          "volume": 0.5
+        },
+        {
+          "time": 0.2,
+          "path": "sfx/brilho.wav",
+          "volume": 0.6
+        }
+      ]
+    },
+    {
+      "sceneId": "chegada",
+      "duration": 3,
+      "environment": {
+        "type": "living_room"
+      },
+      "characters": [
+        "caio"
+      ],
+      "placements": {
+        "caio": [
+          0.9,
+          0,
+          -1.6
+        ]
+      },
+      "camera": {
+        "preset": "close_up",
+        "target": "caio",
+        "distance": 3,
+        "height": 1.5,
+        "fov": 40,
+        "push": 0.4,
+        "handheld": 0.5
+      },
+      "events": [
+        {
+          "time": 0,
+          "actor": "caio",
+          "action": "walk_to",
+          "target": "center",
+          "duration": 2.2,
+          "emotion": "sad"
+        },
+        {
+          "time": 2.2,
+          "actor": "caio",
+          "action": "sad",
+          "duration": 0.8,
+          "emotion": "sad"
+        }
+      ],
+      "lines": [
+        {
+          "time": 1.2,
+          "speaker": "caio",
+          "text": "Nem um parabéns..."
+        }
+      ],
+      "dialogues": [],
+      "sounds": [
+        {
+          "time": 0,
+          "path": "sfx/swish_1.wav",
+          "volume": 0.4
+        }
+      ]
+    },
+    {
+      "sceneId": "surpresa",
+      "duration": 3,
+      "environment": {
+        "type": "living_room"
+      },
+      "characters": [
+        "caio",
+        "davi",
+        "noah",
+        "tony"
+      ],
+      "placements": {
+        "caio": [
+          0,
+          0,
+          0.6
+        ],
+        "davi": [
+          -0.95,
+          0,
+          0.1
+        ],
+        "noah": [
+          0.95,
+          0,
+          0.0
+        ],
+        "tony": [
+          -0.3,
+          0,
+          -0.5
+        ]
+      },
+      "camera": {
+        "preset": "group",
+        "target": "caio",
+        "distance": 6,
+        "height": 2.0,
+        "fov": 40,
+        "handheld": 1.2,
+        "shake": [
+          {
+            "time": 0.05,
+            "duration": 0.7,
+            "strength": 1.6
+          }
+        ]
+      },
+      "events": [
+        {
+          "time": 0,
+          "actor": "caio",
+          "action": "surprised",
+          "duration": 1.5,
+          "emotion": "surprised"
+        },
+        {
+          "time": 0,
+          "actor": "davi",
+          "action": "jump",
+          "duration": 0.9,
+          "emotion": "happy"
+        },
+        {
+          "time": 0,
+          "actor": "noah",
+          "action": "jump",
+          "duration": 0.9,
+          "emotion": "happy"
+        },
+        {
+          "time": 0.05,
+          "actor": "tony",
+          "action": "jump",
+          "duration": 0.9,
+          "emotion": "happy"
+        },
+        {
+          "time": 0.9,
+          "actor": "davi",
+          "action": "celebrate",
+          "duration": 2.1
+        },
+        {
+          "time": 0.9,
+          "actor": "noah",
+          "action": "celebrate",
+          "duration": 2.1
+        },
+        {
+          "time": 0.95,
+          "actor": "tony",
+          "action": "celebrate",
+          "duration": 2.05
+        },
+        {
+          "time": 1.5,
+          "actor": "caio",
+          "action": "talk",
+          "duration": 1.5,
+          "emotion": "happy"
+        }
+      ],
+      "lines": [
+        {
+          "time": 0.05,
+          "speaker": "davi",
+          "text": "Surpresa!"
+        },
+        {
+          "time": 0.05,
+          "speaker": "noah",
+          "text": "Surpresa!"
+        },
+        {
+          "time": 0.1,
+          "speaker": "tony",
+          "text": "Surpresa!"
+        },
+        {
+          "time": 1.5,
+          "speaker": "caio",
+          "text": "Vocês lembraram?!"
+        }
+      ],
+      "dialogues": [],
+      "sounds": [
+        {
+          "time": 0,
+          "path": "music/alegre.wav",
+          "volume": 0.5
+        },
+        {
+          "time": 0,
+          "path": "sfx/confete.wav",
+          "volume": 0.85
+        },
+        {
+          "time": 0.05,
+          "path": "sfx/lingua_de_sogra.wav",
+          "volume": 0.55
+        },
+        {
+          "time": 0.1,
+          "path": "sfx/boing.wav",
+          "volume": 0.4
+        },
+        {
+          "time": 0.5,
+          "path": "sfx/palmas.wav",
+          "volume": 0.6
+        }
+      ]
+    },
+    {
+      "sceneId": "cachorro",
+      "duration": 5,
+      "environment": {
+        "type": "living_room"
+      },
+      "characters": [
+        "caio",
+        "davi",
+        "noah",
+        "tony"
+      ],
+      "placements": {
+        "caio": [
+          0,
+          0,
+          0.6
+        ],
+        "davi": [
+          -0.95,
+          0,
+          0.1
+        ],
+        "noah": [
+          0.95,
+          0,
+          0.0
+        ],
+        "tony": [
+          -0.3,
+          0,
+          -0.5
+        ]
+      },
+      "props": [
+        {
+          "id": "rex",
+          "model": "cachorro",
+          "position": [
+            3.2,
+            0,
+            -2.2
+          ],
+          "moves": [
+            {
+              "time": 1.0,
+              "duration": 1.4,
+              "to": [
+                0.55,
+                0,
+                1.05
+              ],
+              "speed": 2.4
+            },
+            {
+              "time": 3.0,
+              "duration": 0.6,
+              "to": [
+                0.25,
+                0,
+                1.25
+              ],
+              "speed": 2.0
+            },
+            {
+              "time": 3.8,
+              "duration": 0.6,
+              "to": [
+                0.65,
+                0,
+                1.15
+              ],
+              "speed": 2.0
+            }
+          ]
+        }
+      ],
+      "camera": {
+        "preset": "group",
+        "target": "caio",
+        "distance": 6,
+        "height": 2.0,
+        "fov": 40,
+        "handheld": 1.1,
+        "push": 0.35,
+        "shake": [
+          {
+            "time": 2.4,
+            "duration": 0.4,
+            "strength": 0.8
+          }
+        ]
+      },
+      "events": [
+        {
+          "time": 0,
+          "actor": "davi",
+          "action": "point",
+          "target": "rex",
+          "duration": 2.5,
+          "emotion": "surprised"
+        },
+        {
+          "time": 0,
+          "actor": "caio",
+          "action": "look_at",
+          "target": "rex",
+          "duration": 1.3,
+          "emotion": "curious"
+        },
+        {
+          "time": 1.0,
+          "actor": "noah",
+          "action": "celebrate",
+          "duration": 4
+        },
+        {
+          "time": 1.2,
+          "actor": "tony",
+          "action": "celebrate",
+          "duration": 3.8
+        },
+        {
+          "time": 1.3,
+          "actor": "caio",
+          "action": "surprised",
+          "duration": 1.1,
+          "emotion": "surprised"
+        },
+        {
+          "time": 2.4,
+          "actor": "caio",
+          "action": "bend_down",
+          "target": "rex",
+          "duration": 1.0,
+          "emotion": "happy"
+        },
+        {
+          "time": 2.5,
+          "actor": "davi",
+          "action": "laugh",
+          "duration": 2.5,
+          "emotion": "happy"
+        },
+        {
+          "time": 3.4,
+          "actor": "caio",
+          "action": "laugh",
+          "duration": 1.6,
+          "emotion": "happy"
+        }
+      ],
+      "lines": [
+        {
+          "time": 0.15,
+          "speaker": "davi",
+          "text": "E tem mais... olha ali!"
+        },
+        {
+          "time": 2.5,
+          "speaker": "caio",
+          "text": "Um cachorrinho!"
+        }
+      ],
+      "dialogues": [],
+      "sounds": [
+        {
+          "time": 0,
+          "path": "sfx/swish_2.wav",
+          "volume": 0.45
+        },
+        {
+          "time": 1.4,
+          "path": "sfx/latido.wav",
+          "volume": 0.7
+        },
+        {
+          "time": 3.0,
+          "path": "sfx/latido.wav",
+          "volume": 0.55
+        }
+      ]
+    },
+    {
+      "sceneId": "abraco",
+      "duration": 4,
+      "environment": {
+        "type": "living_room"
+      },
+      "characters": [
+        "caio",
+        "davi",
+        "noah",
+        "tony"
+      ],
+      "placements": {
+        "caio": [
+          0.25,
+          0,
+          0.5
+        ],
+        "tony": [
+          -0.37,
+          0,
+          0.5
+        ],
+        "davi": [
+          -1.2,
+          0,
+          0.1
+        ],
+        "noah": [
+          1.2,
+          0,
+          0.1
+        ]
+      },
+      "props": [
+        {
+          "id": "rex",
+          "model": "cachorro",
+          "position": [
+            0.8,
+            0,
+            1.2
+          ],
+          "rotation": -30,
+          "moves": [
+            {
+              "time": 1.5,
+              "duration": 0.8,
+              "to": [
+                0.4,
+                0,
+                1.35
+              ],
+              "speed": 2.0
+            },
+            {
+              "time": 2.8,
+              "duration": 0.8,
+              "to": [
+                0.85,
+                0,
+                1.2
+              ],
+              "speed": 2.0
+            }
+          ]
+        }
+      ],
+      "camera": {
+        "preset": "group",
+        "target": "caio",
+        "distance": 5.5,
+        "height": 1.9,
+        "fov": 40,
+        "push": 0.5,
+        "handheld": 0.6
+      },
+      "events": [
+        {
+          "time": 0,
+          "actor": "caio",
+          "action": "hug",
+          "target": "tony",
+          "duration": 4,
+          "emotion": "happy"
+        },
+        {
+          "time": 0,
+          "actor": "tony",
+          "action": "hug",
+          "target": "caio",
+          "duration": 4,
+          "emotion": "happy"
+        },
+        {
+          "time": 0,
+          "actor": "davi",
+          "action": "laugh",
+          "duration": 2,
+          "emotion": "happy"
+        },
+        {
+          "time": 0,
+          "actor": "noah",
+          "action": "celebrate",
+          "duration": 4,
+          "emotion": "happy"
+        },
+        {
+          "time": 2,
+          "actor": "davi",
+          "action": "wave",
+          "duration": 2
+        }
+      ],
+      "lines": [
+        {
+          "time": 0.5,
+          "speaker": "tony",
+          "text": "Eu nunca ia esquecer."
+        }
+      ],
+      "dialogues": [],
+      "sounds": [
+        {
+          "time": 0,
+          "path": "sfx/swish_3.wav",
+          "volume": 0.4
+        },
+        {
+          "time": 0.4,
+          "path": "sfx/brilho.wav",
+          "volume": 0.45
+        }
+      ]
+    },
+    {
+      "sceneId": "danca",
+      "duration": 6,
+      "environment": {
+        "type": "living_room"
+      },
+      "characters": [
+        "caio",
+        "davi",
+        "noah",
+        "tony"
+      ],
+      "placements": {
+        "caio": [
+          0.0,
+          0,
+          0.5
+        ],
+        "tony": [
+          -0.6,
+          0,
+          0.15
+        ],
+        "davi": [
+          -1.05,
+          0,
+          -0.25
+        ],
+        "noah": [
+          0.75,
+          0,
+          0.05
+        ]
+      },
+      "props": [
+        {
+          "id": "rex",
+          "model": "cachorro",
+          "position": [
+            0.9,
+            0,
+            1.3
+          ],
+          "moves": [
+            {
+              "time": 0.4,
+              "duration": 1.4,
+              "to": [
+                -0.9,
+                0,
+                1.3
+              ],
+              "speed": 2.2
+            },
+            {
+              "time": 2.0,
+              "duration": 1.0,
+              "to": [
+                0.0,
+                0,
+                1.6
+              ],
+              "speed": 2.2
+            },
+            {
+              "time": 3.3,
+              "duration": 1.2,
+              "to": [
+                0.9,
+                0,
+                1.3
+              ],
+              "speed": 2.2
+            },
+            {
+              "time": 4.7,
+              "duration": 1.0,
+              "to": [
+                0.1,
+                0,
+                1.5
+              ],
+              "speed": 2.2
+            }
+          ]
+        }
+      ],
+      "camera": {
+        "preset": "group",
+        "target": "caio",
+        "distance": 6,
+        "height": 2.0,
+        "fov": 40,
+        "handheld": 1.0,
+        "push": 0.45,
+        "shake": [
+          {
+            "time": 0.0,
+            "duration": 0.35,
+            "strength": 0.6
+          }
+        ]
+      },
+      "events": [
+        {
+          "time": 0,
+          "actor": "caio",
+          "action": "dance",
+          "duration": 6,
+          "emotion": "happy"
+        },
+        {
+          "time": 0,
+          "actor": "davi",
+          "action": "dance",
+          "duration": 6,
+          "emotion": "happy"
+        },
+        {
+          "time": 0.1,
+          "actor": "noah",
+          "action": "dance",
+          "duration": 5.9,
+          "emotion": "happy"
+        },
+        {
+          "time": 0.2,
+          "actor": "tony",
+          "action": "dance",
+          "duration": 5.8,
+          "emotion": "happy"
+        }
+      ],
+      "lines": [
+        {
+          "time": 0.3,
+          "speaker": "caio",
+          "text": "Melhor aniversário!"
+        }
+      ],
+      "dialogues": [
+        {
+          "time": 2.6,
+          "duration": 3.4,
+          "text": "Marca aquele amigo que nunca esquece seu aniversário!"
+        }
+      ],
+      "sounds": [
+        {
+          "time": 0,
+          "path": "sfx/swish_1.wav",
+          "volume": 0.45
+        },
+        {
+          "time": 0.1,
+          "path": "sfx/confete.wav",
+          "volume": 0.65
+        },
+        {
+          "time": 3.0,
+          "path": "sfx/palmas.wav",
+          "volume": 0.45
+        }
+      ]
+    }
+  ]
+}
